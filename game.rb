@@ -36,6 +36,8 @@ class Minesweeper
     pos = ask_pos
     if @board[pos].bomb
       game_over
+      reveal(pos)
+      @board.display
     else
       reveal(pos)
     end
