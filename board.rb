@@ -14,7 +14,7 @@ class Board
   end
 
   def populate
-    until @bombs.count == 9 do
+    until @bombs.count == 10 do
       pos = [(0..8).to_a.sample, (0..8).to_a.sample]
       unless self[pos].bomb
         self[pos].bomb = true
@@ -33,21 +33,44 @@ class Board
     @grid[row][col] = val
   end
 
+  def bombs_disp
+    num = @bombs.count.to_s
+    if num.length < 2
+      "0" + num
+    else
+      num
+    end
+  end
+
   def display
-    @grid.each do |row|
+    puts "____________________"
+    puts "#{bombs_disp}   MINESWEEPER    "
+    puts "____________________"
+    puts " |0|1|2|3|4|5|6|7|8|"
+    @grid.each_with_index do |row, row_id|
+      print "#{row_id}|"
       row.each do |tile|
-        print " "
         if tile.revealed
-          if tile.bomb
-            print "B "
-          else
-            print "_ "
-          end
+          print "_|"
+          #display_revealed(tile)
         else
-          print "* "
+          print "*|"
         end
       end
       print "\n"
+    end
+  end
+
+  def display_revealed(tile)
+    # get neighbors
+    # if any?neighbors.bomb
+    # display count
+    # else
+    # neighors.each display_revealed(neighbor)
+    if tile.bomb
+      print "B "
+    else
+      print "_ "
     end
   end
 
