@@ -51,4 +51,23 @@ class Board
     end
   end
 
+  def get_neighbors(pos)
+    neighbors = []
+    (-1..1).each do |i|
+      (-1..1).each do |j|
+        neighbors << [pos[0] + j, pos[1] + i]
+      end
+    end
+    neighbors.delete(pos)
+    neighbors
+  end
+
+  def bomb_neighbors(pos)
+    count = 0
+    get_neighbors(pos).each do |el|
+      count += 1 if self[el].bomb
+    end
+    self[pos].count = count
+  end
+
 end

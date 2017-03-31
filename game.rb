@@ -35,5 +35,9 @@ class Minesweeper
     parse(gets.chomp)
   end
 
+  def game_over
+    puts "Game over"
+  end
+
 
 end
