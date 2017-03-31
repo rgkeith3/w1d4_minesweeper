@@ -4,7 +4,7 @@ require_relative 'tile.rb'
 class Board
 
   def initialize
-    @grid = Array.new(9) { Array.new(9) { Tile.new } }
+    @grid = Array.new(9) { Array.new(9) }
     @bombs = []
     populate
   end
@@ -14,6 +14,16 @@ class Board
   end
 
   def populate
+    (0..8).each do |row|
+      (0..8).each do |col|
+        pos = [row,col]
+        self[pos] = Tile.new(pos, self)
+      end
+    end
+    add_bombs
+  end
+
+  def add_bombs
     until @bombs.count == 10 do
       pos = [(0..8).to_a.sample, (0..8).to_a.sample]
       unless self[pos].bomb
@@ -34,13 +44,19 @@ class Board
   end
 
   def bombs_disp
-    num = @bombs.count.to_s
+    return "00" if flag_count > 9
+    num = (10 - flag_count).to_s
     if num.length < 2
       "0" + num
     else
       num
     end
   end
+
+  def flag_count
+    @grid.flatten.count {|tile| tile.flag}
+  end
+
 
   def display
     puts "____________________"
@@ -51,8 +67,9 @@ class Board
       print "#{row_id}|"
       row.each do |tile|
         if tile.revealed
-          print "_|"
-          #display_revealed(tile)
+          display_revealed(tile)
+        elsif tile.flag
+          print "F|"
         else
           print "*|"
         end
@@ -62,15 +79,12 @@ class Board
   end
 
   def display_revealed(tile)
-    # get neighbors
-    # if any?neighbors.bomb
-    # display count
-    # else
-    # neighors.each display_revealed(neighbor)
     if tile.bomb
-      print "B "
+      print "B|"
+    elsif tile.count > 0
+      print "#{tile.count}|"
     else
-      print "_ "
+      print "_|"
     end
   end
 

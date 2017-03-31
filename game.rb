@@ -20,20 +20,26 @@ class Minesweeper
     @board.display
     puts "Would you like to guess or flag?"
     input = gets.chomp
+    pos = ask_pos
 
     case input.downcase
-    when "guess"
-      guess
+
     when  "flag"
-      flag
+      flag(pos)
+    when "guess"
+      guess(pos)
     else
       puts "what?"
       play_turn
     end
   end
 
-  def guess
-    pos = ask_pos
+  def flag(pos)
+    @board[pos].flag = true
+  end
+
+
+  def guess(pos)
     if @board[pos].bomb
       game_over
       reveal(pos)
